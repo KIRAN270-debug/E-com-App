@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Management</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <!-- Add Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+<div class="admin-page-section">
+    <div class="admin-page-container">
+
+        <!-- Add Admin Section -->
+        <div class="admin-page-add-section">
+            <h2 class="admin-page-title">Add New Admin</h2>
+            <form th:action="@{/admin/addadmin-handle}" method="post" class="admin-page-form" th:object="${admin}">
+                <div class="admin-page-form-group">
+                    <label for="name" class="admin-page-label">Name</label>
+                    <input type="text" id="name" th:field="*{name}" class="admin-page-input" placeholder="Enter name">
+                    <small class="admin-page-error-message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+                </div>
+                <div class="admin-page-form-group">
+                    <label for="email" class="admin-page-label">Email</label>
+                    <input type="email" id="email" th:field="*{email}" class="admin-page-input" placeholder="Enter email">
+                    <small class="admin-page-error-message" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+                </div>
+                <div class="admin-page-form-group">
+                    <label for="password" class="admin-page-label">Password</label>
+                    <input type="password" id="password" th:field="*{password}" class="admin-page-input" placeholder="Enter password">
+                    <small class="admin-page-error-message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></small>
+                </div>
+                <button type="submit" class="admin-page-submit-btn">Add Admin</button>
+            </form>
+        </div>
+
+        <!-- Existing Admins Section -->
+        <div class="admin-page-existing-section">
+            <h2 class="admin-page-title">Existing Admins</h2>
+            <table class="admin-page-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="admin : ${admins}">
+                        <td th:text="${admin.name}"></td>
+                        <td th:text="${admin.email}"></td>
+                        <td>
+                            <a th:href="@{/admin/update/{id}(id=${admin.id})}" class="admin-page-action-link">
+                                <i class="fas fa-edit"></i> <!-- Edit Icon -->
+                            </a>
+                            <a th:href="@{/admin/delete/{id}(id=${admin.id})}" class="admin-page-action-link">
+                                <i class="fas fa-trash-alt"></i> <!-- Delete Icon -->
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<!-- Success and Error Messages -->
+<div id="messageContainer">
+    <!-- Thymeleaf-rendered success and error messages -->
+    <div th:if="${successMessage}" class="success-message fade-in" id="serverSuccessMessage" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="error-message fade-in" id="serverErrorMessage" th:text="${errorMessage}"></div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        console.log("JavaScript loaded!");
+        // ========================== Message Display Logic ==========================
+        const messageContainer = document.getElementById("messageContainer");
+
+        if (!messageContainer) {
+            console.error("Message container element not found!");
+            return;
+        }
+
+        // Function to show a message with animation
+        function showMessage(message, isError) {
+            // Clear existing messages
+            messageContainer.innerHTML = "";
+
+            // Create a new message element
+            const messageElement = document.createElement("div");
+            messageElement.textContent = message;
+            messageElement.classList.add(isError ? "error-message" : "success-message");
+
+            // Add the message to the container
+            messageContainer.appendChild(messageElement);
+
+            // Trigger reflow to enable animation
+            void messageElement.offsetWidth;
+
+            // Add fade-in animation
+            messageElement.classList.add("fade-in");
+
+            // Remove the message after 5 seconds
+            setTimeout(() => {
+                messageElement.classList.remove("fade-in");
+                messageElement.classList.add("fade-out");
+                setTimeout(() => {
+                    if (messageContainer.contains(messageElement)) {
+                        messageContainer.removeChild(messageElement);
+                    }
+                }, 500); // Fade-out duration
+            }, 5000); // Display message for 5 seconds
+        }
+
+        // ========================== Handle Server-Side Messages ==========================
+        const serverSuccessMessage = document.querySelector("#serverSuccessMessage");
+        const serverErrorMessage = document.querySelector("#serverErrorMessage");
+
+        if (serverSuccessMessage && serverSuccessMessage.textContent.trim() !== "") {
+            showMessage(serverSuccessMessage.textContent, false);
+        }
+        if (serverErrorMessage && serverErrorMessage.textContent.trim() !== "") {
+            showMessage(serverErrorMessage.textContent, true);
+        }
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Shoes Category</title>
+<!-- Link to your custom CSS -->
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+	<section>
+		<div class="container mt-4">
+			<!-- Back Button -->
+			<a th:href="@{/}" class="btn btn-back"> 
+				<i class="fas fa-arrow-left"></i> Back to Home
+			</a>
+
+			<!-- Category Title -->
+			<div class="category-title" th:each="categorys : ${category}">
+			<h1 th:text="${categorys.name}"></h1>
+			</div>
+
+			<!-- Product Grid -->
+			<div class="row">
+				<div th:each="product : ${products}" class="col-md-4 mb-4">
+					<div class="product-card">
+						<!-- Product Image -->
+						<div class="product-image-container">
+							<img th:src="${product.imagePath}" alt="Product Image" class="product-image">
+						</div>
+
+						<!-- Product Details -->
+						<div class="product-details">
+							<h3 class="product-title" th:text="${product.title}"></h3>
+							<p class="product-price">
+								₹<span th:text="${product.price}"></span>
+							</p>
+
+							<!-- Stock Status -->
+							<p class="product-stock">
+								<span th:if="${product.stock > 0}" class="text-success">Available</span>
+								<span th:if="${product.stock == 0}" class="text-danger">Out of Stock</span>
+							</p>
+
+							<!-- Product Description -->
+							<p class="product-description" th:text="${product.description}"></p>
+
+							<!-- Add to Cart Button (Only if stock > 0) -->
+							<button class="btn btn-add-to-cart" th:if="${product.stock > 0}">
+								<i class="fas fa-shopping-cart"></i> Add to Cart
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+</body>
+</html>

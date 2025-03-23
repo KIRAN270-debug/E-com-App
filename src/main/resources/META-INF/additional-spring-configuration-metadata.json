@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "upload.image.directory",
+    "type": "java.lang.String",
+    "description": "A description for 'upload.image.directory'"
+  },
+  {
+    "name": "upload.category.image.directory",
+    "type": "java.lang.String",
+    "description": "A description for 'upload.category.image.directory'"
+  },
+  {
+    "name": "upload.product.image.directory",
+    "type": "java.lang.String",
+    "description": "A description for 'upload.product.image.directory'"
+  }
+]}

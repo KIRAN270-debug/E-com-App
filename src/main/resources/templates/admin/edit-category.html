@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Category</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+    <section class="category-section">
+        <div class="category-container">
+            <h2 class="category-title">Edit Category</h2>
+
+            <!-- Edit Category Form -->
+            <form action="/admin/category/update" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" th:value="${category.id}">
+                
+                <div class="form-group">
+                    <label for="categoryName" class="category-label">Category Name:</label>
+                    <input type="text" id="categoryName" name="name" class="category-input"
+                           th:value="${category.name}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="categoryImage" class="category-label">Upload New Image (Optional):</label>
+                    <input type="file" id="categoryImage" name="image" class="category-file-input"
+                           accept="image/jpeg, image/png, image/jpg">
+                </div>
+
+                <button type="submit" class="category-submit-btn">Update Category</button>
+            </form>
+        </div>
+    </section>
+
+</body>
+</html>

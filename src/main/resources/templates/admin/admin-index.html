@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <section>
+        <div class="admin-dashboard-container">
+            <!-- Sidebar (Admin Panel) -->
+            <aside class="admin-dashboard-sidebar">
+                <h2>
+                    <i class="fa-solid fa-user-shield"></i> Admin Panel
+                </h2>
+                <ul class="admin-dashboard-menu">
+                    <li><a href="#" onclick="loadPage('/admin/category')"> <i class="fa-solid fa-list"></i> Add Category </a></li>
+                    <li><a href="#" onclick="loadPage('/admin/addadmin')"> <i class="fa-solid fa-user-plus"></i> Add Admin </a></li>
+                    <li><a href="#" onclick="loadPage('/admin/addproduct')"> <i class="fa-solid fa-box"></i> Add Products </a></li>
+                    <li><a href="#" onclick="loadPage('/admin/viewproducts')"> <i class="fa-solid fa-box-open"></i> View Products </a></li> <!-- Added View Products -->
+                    <li><a href="#" onclick="loadPage('orders.html')"> <i class="fa-solid fa-receipt"></i> Orders </a></li>
+                    <li><a href="#" onclick="loadPage('users.html')"> <i class="fa-solid fa-users"></i> Users </a></li>
+                    <li><a href="#" onclick="loadPage('admins.html')"> <i class="fa-solid fa-user-tie"></i> Admins </a></li>
+                    <li><a href="#" th:href="@{/}"> <i class="fa-solid fa-home"></i> Back to Store </a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="admin-dashboard-content">
+                <iframe class="admin-dashboard-frame" id="contentFrame" src=""></iframe>
+            </main>
+        </div>
+
+        <!-- JavaScript -->
+        <script>
+            function loadPage(page) {
+                document.getElementById('contentFrame').src = page;
+            }
+        </script>
+    </section>
+</body>
+</html>

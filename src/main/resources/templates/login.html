@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{base::layout(~{::section})}">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+	<section>
+		<div class="login-container">
+			<!-- Message Container -->
+			<div id="messageContainer">
+				<!-- Display error message -->
+				<div th:if="${param.error}" class="error-message fade-in">
+					Invalid email or password. Please try again.</div>
+				<!-- Display logout message -->
+				<div th:if="${param.logout}" class="success-message fade-in">
+					You have been logged out successfully.</div>
+			</div>
+
+			<div class="login-container">
+				<h2 class="login-title">Login</h2>
+				<form th:action="@{/login}" method="post">
+					<div class="login-form-group">
+						<label for="username">Email:</label> <input type="email"
+							id="username" name="username" placeholder="Enter your email"
+							required />
+					</div>
+					<div class="login-form-group">
+						<label for="password">Password:</label> <input type="password"
+							id="password" name="password" placeholder="Enter your password"
+							required />
+					</div>
+					<button type="submit" class="login-btn">Login</button>
+				</form>
+				<div class="login-register-link">
+					Don't have an account? <a th:href="@{/register}">Register here</a><br>
+					<a th:href="@{/forgot-password}">Forgot Password?</a>
+				</div>
+
+			</div>
+
+			<script>
+    // Automatically fade out the message after 3 seconds
+    setTimeout(() => {
+        const successMessage = document.querySelector('.success-message');
+        const errorMessage = document.querySelector('.error-message');
+        if (successMessage) {
+            successMessage.classList.add('fade-out');
+        }
+        if (errorMessage) {
+            errorMessage.classList.add('fade-out');
+        }
+    }, 3000);
+</script>
+	</section>
+</body>
+</html>

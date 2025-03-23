@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>View Products</title>
+<link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+	<!-- Success & Error Messages -->
+	<div id="messageContainer">
+		<p th:if="${errorMessage}" th:text="${errorMessage}" class="error-message"></p>
+		<p th:if="${successMessage}" th:text="${successMessage}" class="success-message"></p>
+	</div>
+
+	<div class="admin-products-container">
+		<h2>Product List</h2>
+
+		<!-- Category Filter (Optional) -->
+		<label for="categoryFilter">Filter by Category:</label> 
+		<select id="categoryFilter" onchange="filterCategory()">
+			<option value="all">All</option>
+			<option th:each="category : ${categories}" th:value="${category.id}"
+				th:text="${category.name}"></option>
+		</select>
+
+		<table class="product-table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Image</th>
+					<th>Name</th>
+					<th>Category</th>
+					<th>Price</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="product : ${products}" th:data-category="${product.category.id}">
+					<td th:text="${product.id}"></td>
+					<td><img th:src="${product.imagePath}" alt="Product Image"></td>
+					<td th:text="${product.title}"></td>
+					<td th:text="${product.category.name}"></td>
+					<td th:text="'₹' + ${product.price}"></td>
+					<td>
+						<a th:href="@{/admin/editproduct/{id}(id=${product.id})}" class="update-btn">Update</a>
+						<a th:href="@{/admin/deleteproduct/{id}(id=${product.id})}" class="delete-btn" onclick="return confirm('Are you sure?')">Delete</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<!-- JavaScript for Message Display and Category Filtering -->
+	<script>
+		// Function to filter products by category
+		function filterCategory() {
+			let selectedCategory = document.getElementById('categoryFilter').value;
+			let rows = document.querySelectorAll('.product-table tbody tr');
+
+			rows.forEach(row => {
+				let categoryId = row.getAttribute('data-category');
+				if (selectedCategory === 'all' || categoryId === selectedCategory) {
+					row.style.display = '';
+				} else {
+					row.style.display = 'none';
+				}
+			});
+		}
+
+		// Message animation logic
+		document.addEventListener("DOMContentLoaded", function () {
+			const messageContainer = document.getElementById("messageContainer");
+
+			if (!messageContainer) {
+				console.error("Message container element not found!"); 
+				return;
+			}
+
+			// Function to show a message with animation
+			function showMessage(message, isError) {
+				messageContainer.innerHTML = "";
+
+				const messageElement = document.createElement("div"); 
+				messageElement.textContent = message;
+				messageElement.classList.add(isError ? "error-message" : "success-message");
+
+				messageContainer.appendChild(messageElement);
+
+				void messageElement.offsetWidth;
+
+				messageElement.classList.add("fade-in");
+
+				setTimeout(() => {
+					messageElement.classList.remove("fade-in");
+					messageElement.classList.add("fade-out");
+					setTimeout(() => {
+						messageContainer.removeChild(messageElement);
+					}, 500);
+				}, 5000);
+			}
+
+			// Check for server-side messages on page load
+			const errorMessage = document.querySelector(".error-message");
+			const successMessage = document.querySelector(".success-message");
+
+			if (errorMessage && errorMessage.textContent.trim() !== "") {
+				showMessage(errorMessage.textContent, true);
+			}
+			if (successMessage && successMessage.textContent.trim() !== "") {
+				showMessage(successMessage.textContent, false);
+			}
+		});
+	</script>
+</body>
+</html>
